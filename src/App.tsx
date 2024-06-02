@@ -1,26 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as React from 'react';
+import { extendTheme, ChakraProvider, RadioGroup } from '@chakra-ui/react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import MainPage  from './page/MainPage';
+import { UserLayout } from 'Layout';
+import { AuthProvider } from 'layout/sidebar/AuthContext';
+import Login from 'page/user/Login';
+import MyInfo from 'myinfo/MyInfo';
+import RaidGroups from 'RaidGroup/RaidGroups';
+import RaidSchedule from 'RaidManagement/RaidManagement';
+import Main from 'RaidManagement/Main';
+const theme = extendTheme({
+  components: {
+    Text: {
+      baseStyle: {
+        textAlign: "center"
+      },
+    },
+  },
+  fonts: {
+    body: `'Noto Sans KR Variable', sans-serif`,
+  },
+});
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
 
-export default App;
+export const App = () => (
+  <AuthProvider>
+    <ChakraProvider theme={theme}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<UserLayout />}>
+            <Route index element={<MainPage />} />
+            <Route path="/signin" element={<Login />} />
+            <Route path="/myinfo" element={<MyInfo />} />
+            <Route path="/raidmanagement" element={<Main />} />
+            <Route path="/raidgroup" element={<RaidGroups />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ChakraProvider>
+  </AuthProvider>
+)
